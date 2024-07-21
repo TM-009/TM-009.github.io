@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/ee0dc52cd8.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Teachable Machine Model - Image Project</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="container-fluid px-0">
+    <header>
+      <h1 class="d-flex justify-content-center py-4 bg-danger text-white">
+        Các Tổng Bí thư ĐCS Việt Nam
+      </h1>
+    </header>
+    
+      <span>
+        <p class="fst-italic pt-3 px-3" style="font-size: 0.9rem">
+          <em>* Vui lòng chọn phương pháp sử dụng</em>
+        </p>
+        <div class="flex-container">
+          <div>
+            <p class="fs-5 pt-3" style="font-size: 1.3rem">
+              (1) Sử dụng webcam
+            </p>
+            <button onclick="useWebcam()" class="btn btn-outline-secondary">
+              Use Webcam
+            </button>
+            <button onclick="stopWebcam()" class="btn btn-outline-secondary">
+              Stop Webcam
+            </button>
+          </div>
+          <div>
+            <p class="fs-5 pt-3" style="font-size: 1.3rem">
+              (2) Upload hình ảnh
+            </p>
+            <input
+              type="file"
+              id="imageUpload"
+              accept="image/*"
+              onchange="uploadImage(event)"
+              class="form-control"          
+            />
+          </div>
+        </div>
+        <div class="container-center">
+          <div
+            id="webcam-container"
+            class="d-flex justify-content-center"
+          ></div>
+          <div
+            id="label-container"
+            style="display: none;"
+          ></div>
+          <div class="information px-3">
+            <div id="ho-chi-minh">
+              <p class="centered-content">
+                <span class="name">CHỦ TỊCH HỒ CHÍ MINH</span><br />
+                Ngày sinh: 19/5/1890, Ngày mất: 02/9/1969<br>Quê quán: Nghệ An.
+                <br />Tổng Bí thư của Đảng từ 10/1956 đến 9/1960
+              </p>
+            </div>
+            <div id="tran-phu">
+              <p class="centered-content">
+                <span class="name">TRẦN PHÚ</span><br />
+                Ngày sinh: 1/5/1904, Ngày mất: 6/9/1931<br />Quê quán: Hà Tĩnh.<br />Tổng
+                Bí thư của Đảng từ 10/1930 đến 4/1931.
+              </p>
+            </div>
+            <div id="le-hong-phong">
+              <p class="centered-content">
+                <span class="name">LÊ HỒNG PHONG</span><br />
+                Ngày sinh: 1902, Ngày mất: 6/9/1942<br />Quê quán: Nghệ An.<br />Tổng
+              Bí thư của Đảng từ 3/1935 đến 7/1936
+              </p>
+            </div>
+            <div id="ha-huy-tap">
+              <p class="centered-content"><span class="name">HÀ HUY TẬP</span><br />
+                Ngày sinh: 24/4/1906, Ngày mất: 28/8/1941<br />Quê quán: Hà Tĩnh.<br />Tổng
+                Bí thư của Đảng từ 7/1936 đến 3/1938</p>
+              
+            </div>
+            <div id="nguyen-van-cu">
+              <p class="centered-content"><span class="name">NGUYỄN VĂN CỪ</span><br />
+                Ngày sinh: 9/7/1912, Ngày mất: 28/8/1941<br />Quê quán: Bắc Ninh.<br />Tổng
+                Bí thư của Đảng từ 3/1938 đến 1/1940</p>
+              
+            </div>
+            <div id="truong-chinh">
+              <p class="centered-content"><span class="name">TRƯỜNG CHINH</span><br />
+                Ngày sinh: 9/2/1907, Ngày mất: 30/9/1988<br />Quê quán: Nam Định.<br />Tổng
+                Bí thư của Đảng: Khóa I (5/1941 - 2/1951), khóa II (2/1951 -
+                10/1956), khóa V (7/1986 - 12/1986)</p>
+              
+            </div>
+            <div id="le-duan">
+              <p class="centered-content"><span class="name">LÊ DUẨN</span><br />
+                Ngày sinh: 7/4/1907, Ngày mất: 10/7/1986<br />Quê quán: Quảng Trị.<br />Bí
+                thư thứ nhất Ban Chấp hành Trung ương (9/1960 - 12/1976), Tổng Bí
+                thư của Đảng (12/1976 - 7/1986)</p>
+              
+            </div>
+            <div id="nguyen-van-linh">
+              <p class="centered-content"><span class="name">NGUYỄN VĂN LINH</span><br />
+                Ngày sinh: 1/7/1915, Ngày mất: 27/4/1998<br />Quê quán: Hưng Yên.<br />Tổng
+                Bí thư của Đảng từ 12/1986 đến 6/1991 (Khóa VI)</p>
+              
+            </div>
+            <div id="do-muoi">
+              <p class="centered-content"><span class="name">ĐỖ MƯỜI</span><br />
+                Ngày sinh: 02/02/1917, Ngày mất: 01/10/2018<br />Quê quán: Hà Nội.<br />Tổng
+                Bí thư của Đảng: Khóa VII, VIII (6/1991 - 12/1997)</p>
+              
+            </div>
+            <div id="le-kha-phieu">
+              <p class="centered-content"><span class="name">LÊ KHẢ PHIÊU</span><br />
+                Ngày sinh: 27/12/1931, Ngày mất: 7/8/2020<br />Quê quán: Thanh Hoá.<br />Tổng
+                Bí thư của Đảng: Khóa VIII (12/1997 - 4/2001)</p>
+              
+            </div>
+            <div id="nong-duc-manh">
+              <p class="centered-content"><span class="name">NÔNG ĐỨC MẠNH</span><br />
+                Ngày sinh: 11/9/1940<br />Quê quán: Bắc Kạn.<br>Tổng Bí thư của Đảng từ
+                4/2001 đến 1/2011 (Khóa IX, X)</p>
+              
+            </div>
+            <div id="nguyen-phu-trong">
+              <p class="centered-content"><span class="name">NGUYỄN PHÚ TRỌNG/span><br />
+                Ngày sinh: 14/4/1944<br />Quê quán: Hà Nội.<br>Tổng Bí thư của Đảng từ 01/2011 đến nay - Khóa XI, XII, XIII</p>            
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    <footer class="border-top border-danger">
+      <div class="d-flex py-3">
+        <p class="px-3 my-0">
+          <i class="fa-solid fa-user-group px-0"></i>
+          Nhóm <strong>TM-009</strong><br />THPT Lê Trọng Tấn - Tp.HCM<br />
+          5, Đường D2, Sơn Kỳ, Tân Phú
+        </p>
+        <div class="icons-flex">
+          <a href="#"><i class="fa-solid fa-square-phone fa-2x"></i></a>
+          <a href="#"><i class="fa-brands fa-square-facebook fa-2x"></i></a>
+          <a href=""><i class="fa-brands fa-square-x-twitter fa-2x"></i></a>
+          <a href=""><i class="fa-brands fa-youtube fa-2x"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
